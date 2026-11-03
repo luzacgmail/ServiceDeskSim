@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { asUser } from '@/lib/supabase';
-import { gemini, fallbackReply } from '@/lib/gemini';
+import { fallbackReply } from '@/lib/ai';
 export async function POST(req: Request) {
   const token = req.headers.get('authorization')?.replace('Bearer ', '') ?? '';
   const { ticketId, message } = await req.json();
