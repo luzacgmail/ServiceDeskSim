@@ -9,7 +9,7 @@ export default function New() {
   async function draft() { setBusy(true); const { data } = await db.auth.getSession(); const x = await fetch('/api/tickets/generate', { method: 'POST', headers: { authorization: `Bearer ${data.session!.access_token}` } }); if (x.ok) setF(await x.json()); else setErr('Could not generate a draft.'); setBusy(false); }
   async function save() { if (!f.subject.trim() || !f.description.trim()) return setErr('Subject and description are required.'); const { data: u } = await db.auth.getUser(); const { error } = await db.from('tickets').insert({ ...f, user_id: u.user!.id }); if (error) return setErr('Could not save the ticket.'); r.push('/queue'); }
   return <div className="p-4 max-w-xl space-y-3"><h1 className="text-lg font-semibold">New ticket</h1>
-    <button onClick={draft} disabled={busy} className="border px-3 py-1 rounded disabled:opacity-50">{busy ? 'Drafting…' : 'Draft with Gemini'}</button>
+    <button onClick={draft} disabled={busy} className="border px-3 py-1 rounded disabled:opacity-50">{busy ? 'Drafting…' : 'Draft with Groq'}</button>
     <input className="border w-full p-2 rounded" placeholder="Subject" value={f.subject} onChange={e => set('subject', e.target.value)} />
     <textarea className="border w-full p-2 rounded h-32" placeholder="Description" value={f.description} onChange={e => set('description', e.target.value)} />
     <div className="flex gap-2"><select className="border p-1 rounded" value={f.category} onChange={e => set('category', e.target.value)}>{['Access', 'Network', 'Hardware', 'Email', 'Software'].map(c => <option key={c}>{c}</option>)}</select>

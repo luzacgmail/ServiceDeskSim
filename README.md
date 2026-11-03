@@ -9,4 +9,4 @@ Import the repo and add the same variables from `.env.example` under Project Set
 ## Tests
 `npm test` runs the auth validation and ticket logic tests (vitest).
 ## Simulated
-Attachments, ticket arrival (timer while the app is open, faster on hard), random slow loads, and the customer (Gemini, with fallback replies).
+Attachments, ticket arrival (timer while the app is open, faster on hard), random slow loads, and the customer (Groq, with fallback replies).
