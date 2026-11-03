@@ -13,7 +13,7 @@ export async function POST(req: Request) {
   const { data: hist } = await db.from('ticket_messages').select('sender,body').eq('ticket_id', ticketId).neq('sender', 'internal').order('created_at');
   const system = `You play a customer contacting an IT service desk. Persona: ${JSON.stringify(t.persona)}. Issue: ${t.subject} - ${t.description}. Stay in character, keep replies under 60 words. Match the persona's mood and technical level. Never reveal the root cause or fix; only answer what the agent asks. Never write as the agent.`;
   const contents = (hist ?? []).map(m => ({ role: m.sender === 'agent' ? 'user' as const : 'model' as const, parts: [{ text: m.body }] }));
-  const reply = (await ai(system, contents)) ?? fallbackReply();
+  const reply = (await groq(system, contents)) ?? fallbackReply();
   await new Promise(r => setTimeout(r, 1500 + Math.random() * 2500));
   await db.from('ticket_messages').insert({ ticket_id: ticketId, user_id: u.user.id, sender: 'customer', body: reply });
   await db.from('ticket_activity').insert({ ticket_id: ticketId, user_id: u.user.id, action: 'Agent replied' });
